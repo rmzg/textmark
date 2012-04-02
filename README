@@ -1,3 +1,28 @@
-This project is intended to create a Lightweight Markup Language similar to Markdown for usage in an upcoming project.
+Textmark version 0.01
+=====================
 
-Its initial implementation will be in Perl.
+Textmark is a Lightweight Markup Language designed for plain text document composition. That is, creating documents using an editor that supports no internal markup such as a browser's textfield or notepad.
+
+INSTALLATION
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+DEPENDENCIES
+
+This module requires these other modules and libraries:
+None so far!
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2012 by Robert Grimes
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.10.1 or,
+at your option, any later version of Perl 5 you may have available.
+
+
