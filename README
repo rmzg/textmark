@@ -3,26 +3,49 @@ Textmark version 0.01
 
 Textmark is a Lightweight Markup Language designed for plain text document composition. That is, creating documents using an editor that supports no internal markup such as a browser's textfield or notepad.
 
-INSTALLATION
+Syntax definitions are as follows:
 
-To install this module type the following:
+= H1 Header =
+== H2 Header ==
+=== H3 Header ===
+==== H4 Header ====
+(Larger numbers means smaller headers)
 
-   perl Makefile.PL
-   make
-   make test
-   make install
+* Unordered bullet points
+* With multiple items
+* * And nested
+* * Lists
 
-DEPENDENCIES
-
-This module requires these other modules and libraries:
-None so far!
-
-COPYRIGHT AND LICENCE
-
-Copyright (C) 2012 by Robert Grimes
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.10.1 or,
-at your option, any later version of Perl 5 you may have available.
+# Ordered lists
+# With multiple items
+# # and nested
+# # Lists
 
 
+	This code is indented by one tab
+	And represents a codeblock
+
+You can also indent with 3 or more spaces or use:
+
+``````````````````
+This is also a codeblock
+Delimited by backticks
+The number of backticks is optional as
+long as they're the only thing on the line
+and the number is greater than 3.
+``````````````````
+
+Paragraphs are any remaining chunks of text seperated by an empty line.
+
+A number of formatting options are supported:
+
+*bold* text
+/italic/ text
+_underlined_ text
+`inline code`
+
+You can produce hyperlinks by using the following syntax:
+[link title](http://hyperlink.destination.com/)
+
+Or insert images using:
+[Image alt text](http://example.com/example.png)
