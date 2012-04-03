@@ -15,6 +15,10 @@ and this is the next paragraph.
 * and so on
 
 with a following paragraph
+
+---------------------
+
+With a hr in between
 EOF
 
 my $output = <<EOF;
@@ -27,6 +31,8 @@ my $output = <<EOF;
 <li><p>and so on</p></li>
 </ul>
 <p>with a following paragraph</p>
+<hr>
+<p>With a hr in between</p>
 EOF
 
 is( textmark( $input), $output );

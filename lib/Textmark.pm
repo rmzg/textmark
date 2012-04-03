@@ -132,6 +132,13 @@ sub textmark {
 
 			$output .= "<h$size>".parse_inline($text)."</h$size>\n";
 		}
+
+		############################################
+		# Horizontal rule
+		elsif( /^----+$/ ) {
+			$output .= "<hr>\n";
+		}
+
 		############################################
 		# Paragraphs 
 		# Must be last block!

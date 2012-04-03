@@ -35,7 +35,16 @@ long as they're the only thing on the line
 and the number is greater than 3.
 ``````````````````
 
-Paragraphs are any remaining chunks of text seperated by an empty line.
+Block quotes:
+
+> quote test
+> from other sources
+> by prefixing each
+> line like so
+
+Paragraphs are any remaining chunks of text separated by an empty line.
+Note that paragraphs will continue on to the next line so when you want
+to break the paragraph, insert an empty line!
 
 A number of formatting options are supported:
 
