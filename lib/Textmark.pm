@@ -72,6 +72,23 @@ sub textmark {
 
 			$output .= build_list( \@list_struct );
 		}
+		############################################
+		# Block quotes
+		elsif( s/\s*>\s*// ) {
+			$output .= "<blockquote>\n".escape_html($_)."\n";
+
+			while( defined( my $line = get_line( \$text ) ) ) {
+				if( $line =~ s/^\s*>\s*// ) {
+					$output .= escape_html($line)."\n";
+				}
+				else {
+					unget_line($line);
+					last;
+				}
+			}
+			
+			$output .= "</blockquote>\n";
+		}
 		
 		############################################
 		# Code Blocks
@@ -116,7 +133,8 @@ sub textmark {
 			$output .= "<h$size>".parse_inline($text)."</h$size>\n";
 		}
 		############################################
-		# Paragraphs
+		# Paragraphs 
+		# Must be last block!
 		elsif( /\S/ ) {
 			$output .= "<p>".parse_inline($_);
 
@@ -151,6 +169,10 @@ sub parse_inline {
 	s/_(\w+)_/<u>$1<\/u>/g;
 	s{/(\w+)/}{<i>$1</i>}g;
 	s/`([^`]+)`/<code>$1<\/code>/g;
+
+	#TODO Make this work, we want to transform 'plain' urls into hyperlinks.
+	# Currently interferes with the actual link codes below.
+	#s{(https?://[\w/.?&=%\@,#!+-]+)}{<a href='$1'>$1</a>}g;
 
 	# Links
 	s/\[\s*([^\]]+?)\s*\]\(\s*([^)]+?)\s*\)/<a href='$2'>$1<\/a>/g;

@@ -151,9 +151,23 @@ is( textmark( $input), $output );
 
 
 $input = <<EOF;
+Start paragraph
+
+> some text
+> in block
+> quotes
+
+After paragraph
 EOF
 
 $output = <<EOF;
+<p>Start paragraph</p>
+<blockquote>
+some text
+in block
+quotes
+</blockquote>
+<p>After paragraph</p>
 EOF
 
 is( textmark( $input), $output );
