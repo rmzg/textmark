@@ -72,4 +72,89 @@ EOF
 
 is( textmark( $input), $output );
 
+$input = <<EOF;
+Paragraph text
+
+	Followed by some code
+	in a block
+	via indents
+
+another paragraph
+
+````````````````
+if( x > 42 ) {
+	printf "yo";
+}
+````````````````
+
+Some complex code
+
+	first level of indent
+		followed by second
+		and still second
+	back to first
+		and second
+			and third
+		second again
+	first again
+
+Break paragraph
+
+        first level of indent
+                followed by second
+                and still second
+        back to first
+                and second
+                        and third
+                second again
+        first again
+EOF
+
+$output = <<EOF;
+<p>Paragraph text</p>
+<code>
+Followed by some code
+in a block
+via indents
+</code>
+<p>another paragraph</p>
+<code>
+if( x &gt; 42 ) {
+	printf "yo";
+}
+</code>
+<p>Some complex code</p>
+<code>
+first level of indent
+	followed by second
+	and still second
+back to first
+	and second
+		and third
+	second again
+first again
+</code>
+<p>Break paragraph</p>
+<code>
+first level of indent
+        followed by second
+        and still second
+back to first
+        and second
+                and third
+        second again
+first again
+</code>
+EOF
+
+is( textmark( $input), $output );
+
+
+$input = <<EOF;
+EOF
+
+$output = <<EOF;
+EOF
+
+is( textmark( $input), $output );
 done_testing();

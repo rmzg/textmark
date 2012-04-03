@@ -74,6 +74,40 @@ sub textmark {
 		}
 		
 		############################################
+		# Code Blocks
+		elsif( /^```+$/ ) {
+			$output .= "<code>\n";
+
+			while( defined( my $line = get_line( \$text ) ) ) {
+				last if $line =~ /^```+$/;
+
+				$output .= escape_html($line)."\n";
+			}
+
+			$output .= "</code>\n";
+		}
+		############################################
+		# Code Blocks Part Two
+		elsif( /^(\t|   +)(.+)$/ ) {
+			my( $indent, $code ) = ($1,$2);
+			
+			$output .= "<code>\n".escape_html($code)."\n";
+
+			while( defined( my $line = get_line( \$text ) ) ) {
+				if( $line !~ /\S/ or $line !~ /^$indent/) {
+					unget_line( $line );
+					last;
+				}
+
+				$line =~ s/^$indent//;
+
+				$output .= escape_html($line)."\n";
+			}
+
+			$output .= "</code>\n";
+		}
+		
+		############################################
 		# Headers
 		elsif( s/^(=+)\s*([^=]+?)\s*(=+)// ) {
 			my( $size, $text ) = ($1,$2);
@@ -98,12 +132,19 @@ sub textmark {
 	return $output;
 }
 
-sub parse_inline {
+sub escape_html {
 	local $_ = shift;
 
 	# Escapes
+	s/&/&amp;/g;
 	s/</&lt;/g;
 	s/>/&gt;/g;
+
+	return $_;
+}
+
+sub parse_inline {
+	local $_ = escape_html( shift );
 
 	# Formatting
 	s/\*(\w+)\*/<b>$1<\/b>/g;
