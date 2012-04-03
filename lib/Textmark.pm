@@ -103,9 +103,21 @@ sub get_line {
 # HTML GENERATION
 ############################################ 
 
+my %list_close_tag = (
+	'*' => '</ul>',
+	'#' => '</ol>',
+);
+
+my %list_start_tag = (
+	'*' => '<ul>',
+	'#' => '</ol>'
+);
+
 sub build_list {
 	my $list = shift;
-	my $indent = shift || 0;
+	my $indent_level = shift || 0;
+
+	my $indent_space = "\t" x $indent_level;
 
 	my $output;
 	my $last_type = '';
@@ -113,36 +125,35 @@ sub build_list {
 	for( @$list ) { 
 
 		if( $_->[0] eq '*' and $last_type ne '*' ) {
-			$output .= ( "\t" x $indent ) . "<ul>\n";
+			if( $last_type eq '#' ) {
+				$output .= $indent_space . "</ol>\n";
+			}
+			$output .= $indent_space . "<ul>\n";
 			$last_type = '*';
 		}
 		elsif( $_->[0] eq '#' and $last_type ne '#' ) {
-			$output .= ( "\t" x $indent ) . "<ol>\n";
+			if( $last_type eq '*' ) {
+				$output .= $indent_space . "</ul>\n";
+			}
+			$output .= $indent_space . "<ol>\n";
 			$last_type = '#';
 		}
 
-		$output .= ( "\t" x $indent ) . "<li><p>$_->[1]</p>";
+		$output .= $indent_space . "<li><p>$_->[1]</p>";
 
 		if( $_->[2] ) {
-			$output .= "\n" . build_list( $_->[2], $indent + 1 );
-			$output .= "\t" x $indent;
+			$output .= "\n" . build_list( $_->[2], $indent_level + 1 );
+			$output .= $indent_space;
 		}
 
 		$output .= "</li>\n";
 	}
 
-	if( $last_type eq '*' ) { 
-		$output .= ( "\t" x $indent ) . "</ul>\n";
-	}
-	elsif( $last_type eq '#' ) {
-		$output .= ( "\t" x $indent ) . "</ol>\n";
-	}
-	else {
-		die "Last type definitely should be set here!";
-	}
+	$output .= $indent_space . $list_close_tag{ $last_type } . "\n";
 
 	return $output;
 }
+
 
 1;
 __END__

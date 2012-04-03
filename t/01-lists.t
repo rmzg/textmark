@@ -136,5 +136,27 @@ EOF
 
 is( textmark( $input ), $output );
 
+$input = <<EOF;
+* Testing
+* adjacent
+# Types
+# of
+# lists
+EOF
+
+$output = <<EOF;
+<ul>
+<li><p>Testing</p></li>
+<li><p>adjacent</p></li>
+</ul>
+<ol>
+<li><p>Types</p></li>
+<li><p>of</p></li>
+<li><p>lists</p></li>
+</ol>
+EOF
+
+is( textmark( $input ), $output );
+
 done_testing();
 
