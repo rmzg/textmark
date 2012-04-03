@@ -26,8 +26,10 @@ sub textmark {
 	my $output = ""; #The text we return
 	my @list_struct;
 
-	while( local $_ = get_line( \$text ) ) {
+	while( defined( local $_ = get_line( \$text ) ) ) {
 
+		############################################
+		# List handling
 		if( s/^\s*$LIST_MARKER\s+// ) {
 			push @list_struct, [ $1, $_ ];
 			my $current_list_level = \@list_struct;
@@ -68,17 +70,53 @@ sub textmark {
 
 			}
 
-			#$output .= build_list( \@list_struct );
-			my $t = build_list( \@list_struct );
+			$output .= build_list( \@list_struct );
+		}
+		
+		############################################
+		# Headers
+		elsif( s/^(=+)\s*([^=]+?)\s*(=+)// ) {
+			my( $size, $text ) = ($1,$2);
+			$size=length($size);
 
-			#print "\n-----\n$t\n------\n";
+			$output .= "<h$size>".parse_inline($text)."</h$size>\n";
+		}
+		############################################
+		# Paragraphs
+		elsif( /\S/ ) {
+			$output .= "<p>".parse_inline($_);
 
-			$output .= $t;
+			while( defined( my $line = get_line( \$text ) ) ) {
+				last if $line eq "";
+				$output .= " ".parse_inline($line);
+			}
 
+			$output .= "</p>\n";
 		}
 	}
 
 	return $output;
+}
+
+sub parse_inline {
+	local $_ = shift;
+
+	# Escapes
+	s/</&lt;/g;
+	s/>/&gt;/g;
+
+	# Formatting
+	s/\*(\w+)\*/<b>$1<\/b>/g;
+	s/_(\w+)_/<u>$1<\/u>/g;
+	s{/(\w+)/}{<i>$1</i>}g;
+	s/`([^`]+)`/<code>$1<\/code>/g;
+
+	# Links
+	s/\[\s*([^\]]+?)\s*\]\(\s*([^)]+?)\s*\)/<a href='$2'>$1<\/a>/g;
+	# Images
+	s/\[\s*([^\]]+?)\s*\]\{\s*([^)]+?)\s*\}/<img src='$2' alt='$1'>/g;
+
+	return $_;
 }
 
 
@@ -91,7 +129,7 @@ sub get_line {
 	
 	if( @line_buffer ) { return pop @line_buffer; }
 
-	if( $$text_ref =~ s/^(.+)$NL// ) { 
+	if( $$text_ref =~ s/^(.*?)$NL// ) { 
 		return $1;
 	}
 		
@@ -139,7 +177,7 @@ sub build_list {
 			$last_type = '#';
 		}
 
-		$output .= $indent_space . "<li><p>$_->[1]</p>";
+		$output .= $indent_space . "<li><p>".parse_inline($_->[1])."</p>";
 
 		if( $_->[2] ) {
 			$output .= "\n" . build_list( $_->[2], $indent_level + 1 );
