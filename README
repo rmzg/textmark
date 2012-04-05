@@ -57,4 +57,4 @@ You can produce hyperlinks by using the following syntax:
 [link title](http://hyperlink.destination.com/)
 
 Or insert images using:
-[Image alt text](http://example.com/example.png)
+[Image alt text]{http://example.com/example.png}
